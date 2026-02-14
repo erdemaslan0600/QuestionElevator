@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACK ARENA - Host</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="glitch" data-text="HACK ARENA">HACK ARENA</h1>
+            <p class="subtitle">Host Control Panel</p>
+        </header>
+
+        <div id="create-room-screen" class="screen active">
+            <div class="menu-content">
+                <h2>// QUIZ SEÇ VE ODA OLUŞTUR</h2>
+                <p style="text-align:center; color:var(--text-dim); margin-bottom:30px;">
+                    Oynamak istediğin quiz'i seç
+                </p>
+                <div id="quiz-list" class="quiz-list">
+                    <p style="text-align:center; color:var(--text-dim);">Yükleniyor...</p>
+                </div>
+                <button class="btn-secondary" onclick="window.location.href='/create.html'" style="margin-top:20px;">
+                    <span class="btn-icon">+</span> Yeni Quiz Oluştur
+                </button>
+            </div>
+        </div>
+
+        <div id="lobby-screen" class="screen">
+            <div class="lobby-content">
+                <div class="pin-display">
+                    <h2>ODA PİN KODU</h2>
+                    <div class="pin-code" id="pin-code">------</div>
+                    <p style="color:var(--text-dim); margin-top:15px;">
+                        Oyuncular bu kodu kullanarak katılabilir<br>
+                        <strong id="join-url">http://localhost:3000</strong>
+                    </p>
+                </div>
+
+                <div class="players-section">
+                    <h3>BAĞLI OYUNCULAR (<span id="player-count">0</span>)</h3>
+                    <div class="players-list" id="players-list">
+                        <div class="empty-state">
+                            <p>Oyuncular bekleniyor...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-select-host">
+                    <h3>OYUN SEÇ</h3>
+                    <div class="game-grid-host">
+                        <button class="game-card-small" onclick="startGameForAll('password')">
+                            <span class="game-icon-small">🔐</span>
+                            <span>Şifre Kırma</span>
+                        </button>
+                        <button class="game-card-small" onclick="startGameForAll('cipher')">
+                            <span class="game-icon-small">🔣</span>
+                            <span>Kod Çözme</span>
+                        </button>
+                        <button class="game-card-small" onclick="startGameForAll('wire')">
+                            <span class="game-icon-small">🔌</span>
+                            <span>Kablo Kesme</span>
+                        </button>
+                        <button class="game-card-small" onclick="startGameForAll('typing')">
+                            <span class="game-icon-small">⌨️</span>
+                            <span>Hızlı Kodlama</span>
+                        </button>
+                        <button class="game-card-small" onclick="startGameForAll('sequence')">
+                            <span class="game-icon-small">🎯</span>
+                            <span>Dizilim</span>
+                        </button>
+                        <button class="game-card-small" onclick="startGameForAll('memory')">
+                            <span class="game-icon-small">🧠</span>
+                            <span>Bellek</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="time-selection">
+                    <h3>OYUN SÜRESİ</h3>
+                    <p style="color:var(--text-dim); margin-bottom:15px;">
+                        Oyun bu süre sonunda otomatik olarak bitecek
+                    </p>
+                    <div class="time-options">
+                        <button class="time-btn" data-duration="5" onclick="selectDuration(5)">
+                            5 Dakika
+                        </button>
+                        <button class="time-btn active" data-duration="10" onclick="selectDuration(10)">
+                            10 Dakika
+                        </button>
+                        <button class="time-btn" data-duration="15" onclick="selectDuration(15)">
+                            15 Dakika
+                        </button>
+                        <button class="time-btn" data-duration="20" onclick="selectDuration(20)">
+                            20 Dakika
+                        </button>
+                        <button class="time-btn" data-duration="30" onclick="selectDuration(30)">
+                            30 Dakika
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-primary" style="margin-top:30px;" onclick="startGameWithTime()">
+                    <span class="btn-icon">▶</span> Oyunu Başlat
+                </button>
+
+                <button class="btn-danger" onclick="endSession()">✕ Oturumu Kapat</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <h2 id="current-game-title">OYUN</h2>
+                <div class="game-timer-display">
+                    <span class="timer-label">Kalan Süre:</span>
+                    <span class="timer-value" id="time-display">00:00</span>
+                </div>
+                <button class="btn-secondary" onclick="backToLobby()">← Lobiye Dön</button>
+            </div>
+
+            <div class="scoreboard-live">
+                <h3>CANLI SKOR TABLOSU</h3>
+                <div class="scoreboard-list" id="scoreboard-list"></div>
+            </div>
+
+            <div class="game-controls">
+                <button class="btn-primary" onclick="nextGame()">Sonraki Oyun</button>
+                <button class="btn-danger" onclick="endGame()">Oyunu Bitir</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <h2>🏆 FİNAL SKORLARI</h2>
+            <div class="final-results" id="final-results"></div>
+            <div class="game-controls">
+                <button class="btn-primary" onclick="backToLobby()">Yeni Oyun</button>
+                <button class="btn-danger" onclick="endSession()">Çıkış</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="host.js"></script>
+</body>
+</html>
