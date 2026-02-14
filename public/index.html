@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACK ARENA - Oyuncu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="glitch" data-text="HACK ARENA">HACK ARENA</h1>
+            <p class="subtitle">Player Terminal</p>
+        </header>
+
+        <div id="join-screen" class="screen active">
+            <div class="join-content">
+                <h2>// OYUNA KATIL</h2>
+                <div class="join-form">
+                    <input type="text" id="nickname-input" placeholder="İsmin" maxlength="15" />
+                    <input type="text" id="pin-input" placeholder="Oda PIN Kodu" maxlength="6" />
+                    <button class="btn-primary" onclick="joinRoom()">Katıl</button>
+                </div>
+                <div id="join-error" class="error-message"></div>
+            </div>
+        </div>
+
+        <div id="waiting-screen" class="screen">
+            <div class="waiting-content">
+                <div class="pulse-icon">⏳</div>
+                <h2>Bağlantı Başarılı!</h2>
+                <p class="player-info">
+                    Oyuncu: <strong id="player-nickname"></strong><br>
+                    Oda: <strong id="room-pin"></strong>
+                </p>
+                <p class="waiting-text">Host oyunu başlatıyor...</p>
+                <div class="waiting-animation">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="player-game-screen" class="screen">
+            <div class="game-header-player">
+                <h3 id="player-game-title">OYUN</h3>
+                <div class="player-stats">
+                    <span>Skor: <strong id="player-score">0</strong></span>
+                </div>
+            </div>
+            <div id="player-game-content" class="game-content"></div>
+        </div>
+
+        <div id="player-result-screen" class="screen">
+            <div class="result-content">
+                <div id="result-icon" class="result-icon">✓</div>
+                <h2 id="result-message">Doğru!</h2>
+                <div class="result-details">
+                    <p>Kazandığın Puan: <strong id="earned-points">0</strong></p>
+                    <p>Toplam Skorun: <strong id="total-player-score">0</strong></p>
+                </div>
+                <p class="waiting-text">Sonraki oyun bekleniyor...</p>
+            </div>
+        </div>
+
+        <div id="final-screen" class="screen">
+            <div class="final-content">
+                <h2>🏁 OYUN BİTTİ!</h2>
+                <div class="final-player-score">
+                    <h3>Senin Skorun</h3>
+                    <div class="big-score" id="final-player-score">0</div>
+                    <p id="final-rank">Sıralaman: -</p>
+                </div>
+                <div class="final-scoreboard" id="final-player-scoreboard"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="success-sound" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwPUKni77dhGwY5k9n0y3krBSl+zPLaizsKFF++7OupWBUIQ5jc8sFtIAUrgs/z2Ik3CBlpu+3om1AMEVCp4/C2YRsGOJHX8sx5LAUAAAA=" preload="auto"></audio>
+    <audio id="fail-sound" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAAB4eXt7fH1+fn9/f3+AgH+AgoGBgoOEhISFhYaHh4iIiYmKiYqLioyMjI2Ojo6PkJCQkZKSkpOUlJSVlpaXmJiYmZmam5qbnJydn56en5+goKGhoqKjpKSkpaampqeoqKipqqqrrKytrq6vsLCxsbKys7O0tbW2t7i4ubm6u7u8vL2+vr/AwMHBwsPDxMXFxsfHyMnJysvLzM3Nzs/P0NDR0dLS09TV1dbW19jY2dna29vc3N3e3t/g4OHh4uLj5OXl5ufo6Onp6uvr7O3t7u/v8PHx8vP09fX29/j4+fr6+/z8/f7+/wABAQICAwQEBQYGBwgICQoKCwwMDQ4ODxAREhITExQVFhYXGBgZGhobGxwdHh4fICEhIiMjJCUmJicoKCkqKywtLS4vMDAxMjIzNDQ1Njc3ODk6Ojs8PD0+Pj9AQEFDQ0REBUZGRkdISUpKS0xNTU5PUFBRU1NUVVVWWFlZWltcXV1eX2BhYWJjZGRlZmdnaGlqa2tsbW5vcHBxcnN0dHV2d3h4eXp7e3x9fn5/gIGBgoOEhYWGh4iIiYqLi4yNjo6PkJGSkpOUlZWWl5iZmZqbnJydnp+goKGio6OkpaanqKipqqusrK2ur7CwsbKztLW1tre4uLm6u7y8vb6/wMDBwsPExcXGx8jJycrLzM3Nzs/Q0dHS09TV1dbX2Nna29vc3d7f4OHi4+Tl5ufo6erq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/wA=" preload="auto"></audio>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="player.js"></script>
+</body>
+</html>

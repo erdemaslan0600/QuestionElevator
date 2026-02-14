@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Oluştur - HACK ARENA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="glitch" data-text="QUIZ CREATOR">QUIZ CREATOR</h1>
+            <p class="subtitle">Admin Panel</p>
+        </header>
+
+        <div id="key-screen" class="screen active">
+            <div class="menu-content">
+                <h2>// GÜVENLİK KONTROLÜ</h2>
+                <p style="text-align:center; color:var(--text-dim); margin-bottom:30px;">
+                    Admin key'inizi girin
+                </p>
+                <div class="join-form">
+                    <input type="password" id="admin-key" placeholder="ADMIN KEY" />
+                    <button class="btn-primary" onclick="verifyKey()">
+                        <span class="btn-icon">🔐</span> Doğrula
+                    </button>
+                </div>
+                <div id="key-error" class="error-message"></div>
+            </div>
+        </div>
+
+        <div id="creator-screen" class="screen">
+            <div class="quiz-creator">
+                <h2>// YENİ QUIZ OLUŞTUR</h2>
+                
+                <div class="form-section">
+                    <label>Quiz Başlığı</label>
+                    <input type="text" id="quiz-title" placeholder="Örn: Matematik Quiz" />
+                </div>
+
+                <div class="form-section">
+                    <label>Açıklama</label>
+                    <input type="text" id="quiz-description" placeholder="Kısa açıklama" />
+                </div>
+
+                <div class="questions-container" id="questions-container">
+                    <h3>SORULAR</h3>
+                    <p style="color:var(--text-dim); margin-bottom:20px;">
+                        Her 3 doğru cevaptan sonra oyuncular ödül kazanır!
+                    </p>
+                </div>
+
+                <button class="btn-secondary" onclick="addQuestion()">
+                    + Soru Ekle
+                </button>
+
+                <div class="form-actions">
+                    <button class="btn-primary" onclick="saveQuiz()">
+                        💾 Quiz'i Kaydet
+                    </button>
+                    <button class="btn-danger" onclick="logout()">
+                        ✕ Çıkış
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="success-screen" class="screen">
+            <div class="success-content">
+                <h2>✅ BAŞARILI!</h2>
+                <p style="color:var(--success-color); font-size:1.3em; margin:30px 0;">
+                    Quiz başarıyla kaydedildi!
+                </p>
+                <div class="quiz-info" id="quiz-info"></div>
+                <div class="form-actions">
+                    <button class="btn-primary" onclick="createAnother()">
+                        Yeni Quiz Oluştur
+                    </button>
+                    <button class="btn-secondary" onclick="goToHost()">
+                        Host Paneline Git
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="create.js"></script>
+</body>
+</html>
